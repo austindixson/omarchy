@@ -9,6 +9,12 @@ declare -A VULKAN_DRIVERS=(
 
 PACKAGES=()
 
+# Apple Silicon GPUs do not show up as PCI VGA the way Intel Macs do. Detect
+# them from the device tree Asahi exposes.
+if omarchy-hw-asahi; then
+  PACKAGES+=(vulkan-asahi)
+fi
+
 for vendor in "${!VULKAN_DRIVERS[@]}"; do
   if lspci | grep -iE "(VGA|Display).*$vendor" > /dev/null; then
     PACKAGES+=("${VULKAN_DRIVERS[$vendor]}")

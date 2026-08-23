@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# omarchy:summary=Detect Apple Silicon (Asahi) hardware
+# omarchy:hidden=true
+
+# Apple Silicon does not enumerate the GPU the way Intel Macs do. Asahi exposes
+# the platform through the device-tree compatible string (apple,j314s and so
+# on). Override the path in tests with OMARCHY_DEVICE_TREE_COMPATIBLE.
+
+compatible="${OMARCHY_DEVICE_TREE_COMPATIBLE:-/proc/device-tree/compatible}"
+
+[[ -f $compatible ]] && grep -qi apple "$compatible"

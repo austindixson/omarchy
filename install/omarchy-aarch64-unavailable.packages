@@ -1,0 +1,29 @@
+# Packages from omarchy-base.packages not attempted by default on aarch64,
+# because building them here is expensive and buys nothing. Two reasons qualify:
+# there is no aarch64 build and the attempt compiles a dependency chain for
+# hours before failing anyway, or the package is x86_64-only and a substitute
+# is installed instead. Most unavailable packages fail their architecture check
+# in seconds and cost nothing; only the expensive or leftover-producing ones
+# are listed. Measured on a clean Apple Silicon install.
+#
+# This is a default, not a verdict. The installer offers to build them anyway
+# when it has a terminal, and OMARCHY_TRY_UNAVAILABLE=1 forces the attempt.
+
+# obs-studio resolves to obs-studio-browser, whose chain builds ffmpeg-obs
+# for hours before an architecture check fails.
+obs-studio
+
+# Arch Linux ARM has no package under this name (only -bin variants on the AUR).
+dotnet-runtime
+
+# Cannot initialize on the Asahi GPU ("unknown gpu vendor: Mesa"). Recording
+# falls back to wf-recorder, which install/hardware/asahi.sh installs instead.
+gpu-screen-recorder
+
+# arch=('x86_64') in the AUR; yay still installs makedepends (dotnet-sdk) first
+# and leaves them orphaned.
+pinta
+
+# AUR pkgbase, not a package: asking for "obsidian" builds nothing named that.
+# install/user/hardware/apple/obsidian.sh installs obsidian-appimage instead.
+obsidian

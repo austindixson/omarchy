@@ -5,6 +5,9 @@
 
 sudo cp -f /etc/pacman.conf /etc/pacman.conf.bak
 sudo cp -f /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+if [[ -f /etc/pacman.d/mirrorlist.asahi-alarm ]]; then
+  sudo cp -f /etc/pacman.d/mirrorlist.asahi-alarm /etc/pacman.d/mirrorlist.asahi-alarm.bak
+fi
 
 channel="${1:-stable}"
 
@@ -16,8 +19,15 @@ fi
 echo "Setting channel to $channel"
 echo
 
-sudo cp -f "$OMARCHY_PATH/default/pacman/pacman-$channel.conf" /etc/pacman.conf
-sudo cp -f "$OMARCHY_PATH/default/pacman/mirrorlist-$channel" /etc/pacman.d/mirrorlist
+if [[ $(uname -m) == "aarch64" ]]; then
+  sudo cp -f "$OMARCHY_PATH/default/pacman/pacman-$channel-aarch64.conf" /etc/pacman.conf
+  sudo cp -f "$OMARCHY_PATH/default/pacman/mirrorlist.asahi-alarm" /etc/pacman.d/mirrorlist.asahi-alarm
+  # Asahi Alarm owns /etc/pacman.d/mirrorlist; do not replace it with the x86
+  # Omarchy mirrorlist. The asahi-alarm include is what this overlay adds.
+else
+  sudo cp -f "$OMARCHY_PATH/default/pacman/pacman-$channel.conf" /etc/pacman.conf
+  sudo cp -f "$OMARCHY_PATH/default/pacman/mirrorlist-$channel" /etc/pacman.d/mirrorlist
+fi
 
 # Allow user customization of /etc/pacman.conf before the upgrade runs
 omarchy-hook pre-refresh-pacman

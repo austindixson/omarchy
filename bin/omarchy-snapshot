@@ -44,6 +44,12 @@ create)
   echo "Snapshots can be selected during boot."
   ;;
 restore)
-  sudo limine-snapper-restore
+  # Limine's snapper restore is the x86 ISO path. Apple Silicon boots GRUB, so
+  # limine-snapper-sync is never installed; restore by swapping the @ subvolume.
+  if omarchy-cmd-present limine-snapper-restore; then
+    sudo limine-snapper-restore
+  else
+    sudo omarchy-system-snapshot-restore
+  fi
   ;;
 esac

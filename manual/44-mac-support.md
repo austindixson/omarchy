@@ -2,7 +2,7 @@
 
 Omarchy has built-in support for **Intel Macs**. There are a couple of known limitations at the moment, but as long as you're aware and OK with those; you can breathe some new life into your old Macs by loading Omarchy.
 
-Please note that installing on an M-series Mac is not directly supported at this time. You can find out more about the state of this in #omarchy-on-other in our [Discord](https://discord.gg/tXFUdasqhY).
+M-series Macs (Apple Silicon) cannot boot the Omarchy ISO. Install Asahi Alarm first, then Omarchy — see [Omarchy on Apple M1/M2](49-omarchy-on.md). Intel Macs follow the ISO path below.
 
 In a simple test, we were able to achieve 36% performance gains on a 2019 MacBook Pro just by installing Omarchy.
 

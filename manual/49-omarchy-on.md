@@ -2,7 +2,33 @@
 
 ### Apple M1/M2 chips
 
-[Asahi Alarm](https://asahi-alarm.org/) is a version of Arch for Apple M1/M2 computers built on top of [Asahi Linux](https://asahilinux.org/). You can get Omarchy running on top of that with some effort. See [the user-driven guide](https://codeberg.org/malik-na/omarchy-mac).
+Do not flash the Omarchy ISO. It is x86_64 and will not boot Apple Silicon.
+
+Install [Asahi Alarm](https://asahi-alarm.org/) (Arch for M1/M2, built on [Asahi Linux](https://asahilinux.org/)) from macOS, then layer Omarchy on top. Keep macOS — the Asahi installer shrinks APFS; a wipe is not required and makes firmware updates harder.
+
+From macOS Terminal:
+
+```bash
+curl https://asahi-alarm.org/installer-bootstrap.sh | sh
+```
+
+Choose **Asahi Alarm Minimal (BTRFS)** and give Linux at least 50 GB (100 GB is more comfortable). Boot into Arch, log in as root, get Wi-Fi up with `nmtui`, then:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/basecamp/omarchy/quattro/bin/omarchy-mac-setup | bash
+```
+
+That moves `/boot` onto the EFI partition, optionally encrypts the root, and installs Omarchy. Reboots happen in between; the script resumes itself on tty1. Pass `--no-encrypt` to skip encryption, or `--repo`/`--ref` to install from a fork.
+
+To install from a local checkout of this tree instead of cloning GitHub (the way to try the port before it is on origin):
+
+```bash
+sudo OMARCHY_SETUP_SRC=/path/to/omarchy bash /path/to/omarchy/bin/omarchy-mac-setup
+```
+
+Some default packages have no aarch64 build (OBS, Pinta, gpu-screen-recorder). The installer skips those and uses substitutes where they exist (mise instead of mise-bin, wf-recorder instead of gpu-screen-recorder, Obsidian's AppImage). USB-C / Thunderbolt displays and Touch ID are still Asahi limitations, not Omarchy ones.
+
+See also [docs/btrfs.md](../docs/btrfs.md) for the snapshot and encryption layout on Apple Silicon.
 
 ### Apple Virtual Machine
 
